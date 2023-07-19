@@ -68,15 +68,18 @@
 
                                 $menus = [$dashboard_link, $helpdesks_link, $reports_link];
                             } elseif ($role == 'Inventory Admin') {
-                                $distributions_count = App\Models\ItemRequest::where('status', 'Pending')->count();
+                                $helpdesks_count = App\Models\HelpdeskSupport::where('status', 'Pending')
+                                    ->count();
+                                $helpdesks_link = ['Helpdesk' . format_count($helpdesks_count), 'bi-headset', '/helpdesk-requests'];
 
+                                $distributions_count = App\Models\ItemRequest::where('status', 'Pending')->count();
                                 $inventory_link = ['Inventory' . format_count($distributions_count), 'bi-pc-display', [
                                     ['Items', '/items'],
                                     ['Inventory', '/inventory'],
                                     ['Distributions' . format_count($distributions_count), '/item-distributions']
                                 ]];
 
-                                $menus = [$dashboard_link, $inventory_link, $reports_link];
+                                $menus = [$dashboard_link, $helpdesks_link, $inventory_link, $reports_link];
                             } elseif ($role == 'Helpdesk Staff') {
                                 $helpdesks_count = App\Models\HelpdeskSupport::where('status', 'Pending')
                                     ->where('staff_id', auth()->id())

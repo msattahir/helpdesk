@@ -426,12 +426,10 @@ function get_staff_options($args = []){
 function get_report_type_options($default = ""){
     $role = auth()->user()->role;
 
-    if($role == "Admin"){
+    if(in_array($role, ["Admin", "Inventory Admin"])){
         $options = ["Helpdesk Supports", "Worktools Distribution", "Consumables Distribution"];
     } elseif(in_array($role, ["Helpdesk Admin", "Adhoc Staff"])){
         $options = ["Helpdesk Supports"];
-    } elseif($role == "Inventory Admin"){
-        $options = ["Worktools Distribution", "Consumables Distribution"];
     } else{
         $options = [];
     }
@@ -646,6 +644,9 @@ function get_authorized_routes($user){
     }elseif($role == 'Inventory Admin'){
         $specific_routes = [
             'items.index', 'items.update', 'items.delete',
+            'helpdesk-requests.update', 'helpdesk-requests.delete',
+            'helpdesk-supports.index', 'helpdesk-supports.show',
+            'helpdesk-supports.update', 'helpdesk-supports.delete',
             'inventory.index', 'inventory.show', 'inventory.update', 'inventory.delete',
             'item-distributions.index', 'item-distributions.show', 'item-distributions.update', 'item-distributions.delete'
         ];
