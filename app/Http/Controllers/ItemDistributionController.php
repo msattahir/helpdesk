@@ -169,6 +169,8 @@ class ItemDistributionController extends Controller
                 self::rules($request),
                 self::rules_messages()
             );
+            $form_data['distributionable_id'] = $request->model_id;
+            $form_data['distributionable_type'] = 'App\\Models\\' . $request->distribute_to;
         }
 
         if(self::insufficient_balance($request, $id)){
@@ -177,9 +179,6 @@ class ItemDistributionController extends Controller
                 'message' => 'Insufficient Quantity'
             ]);
         }
-
-        $form_data['distributionable_id'] = $request->model_id;
-        $form_data['distributionable_type'] = 'App\\Models\\' . $request->distribute_to;
 
         if (record_changed(ItemDistribution::class, $id, $form_data)) {
             $timestamp = date("Y-m-d H:i:s");

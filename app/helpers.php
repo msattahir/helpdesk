@@ -273,7 +273,8 @@ function get_ddd_options($default = ""){
 
     $sel = Ddd::select('id','short','name')->orderBy('short')->get();
     foreach ($sel as $fet) {
-        $return .= '<option value='.@$fet->id.' '.(@$fet->id == $default ? "selected" : "").'>'.@$fet->short.' - '.@$fet->name.'</option>';
+        $label = @$fet->short.' - '.@$fet->name;
+        $return .= '<option data-tokens="'.$label.'" value='.@$fet->id.' '.(@$fet->id == $default ? "selected" : "").'>'.$label.'</option>';
         $options[] = @$fet->id;
     }
     if($default == "validate"){
@@ -414,7 +415,8 @@ function get_staff_options($args = []){
 
     $sel = $query->orderBy('staff_no')->get();
     foreach ($sel as $fet) {
-        $return .= '<option value='.@$fet->id.' '.(@$fet->id == $default ? "selected" : "").'>'.@$fet->staff_no.' - '.@$fet->name.'</option>';
+        $label = @$fet->staff_no.' - '.@$fet->name;
+        $return .= '<option data-tokens="'.$label.'" value='.@$fet->id.' '.(@$fet->id == $default ? "selected" : "").'>'.$label.'</option>';
         $options[] = @$fet->id;
     }
     if($default == "validate"){
