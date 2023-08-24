@@ -353,6 +353,8 @@ $(document).ready(function () {
         $form.trigger('submit');
     });
 
+    var ts_model_id;
+
     $(document).on('change', '#register-form [name="distribute_to"]', function(e, callback){
         if($(this).val() == "Staff"){
             $('#distribute-to').html(`<div class="row mb-3">
@@ -377,6 +379,8 @@ $(document).ready(function () {
                 </div>
             </div>`);
         }
+        // ts_model_id = new TomSelect('#register-form [name="model_id"]');
+
         if (typeof callback === "function") callback();
         else $('#register-form').find('[name="ddd_id"]').trigger("change");
     });
@@ -438,6 +442,9 @@ $(document).ready(function () {
                 method: 'GET',
                 success: function(data) {
                     $div.append(data.record);
+                    // ts_model_id.clear();
+                    // ts_model_id.clearOptions();
+                    // ts_model_id.sync();
                     if (typeof callback === "function")
                         callback();
                 },
