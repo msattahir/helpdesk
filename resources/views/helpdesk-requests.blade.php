@@ -329,6 +329,8 @@ $(document).ready(function () {
         original_form = $('#register-form').serialize();
     });
 
+    var ts_staff_id = new TomSelect('#register-form [name="staff_id"]');
+
     $(document).on('change', '#register-form [name="parent_category_id"], #register-form [name="ddd_id"]', function (e, callback) {
         if($(this).prop('name') == 'parent_category_id'){
             var $div = $('#register-form [name="request_category_id"]');
@@ -346,6 +348,9 @@ $(document).ready(function () {
                 method: 'GET',
                 success: function(data) {
                     $div.append(data.record);
+                    ts_staff_id.clear();
+                    ts_staff_id.clearOptions();
+                    ts_staff_id.sync();
                     if (typeof callback === "function")
                         callback();
                 },
