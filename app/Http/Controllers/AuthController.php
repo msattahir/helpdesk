@@ -42,6 +42,30 @@ class AuthController extends Controller
         return view('change-password');
     }
 
+    public function forgot_password(Request $request){
+
+        if($request->ajax()){
+            $credentials = $request->only('staff_no', 'password');
+            if (Auth::attempt($credentials)) {
+                $request->validate(self::change_password_rules($request));
+                $user = auth()->user();
+
+                $user->password = Hash::make($request->input('new_password'));
+                $user->reset_password = false;
+                $user->save();
+
+                ActivityLog::create([
+                    'activity' => 'Password reset',
+                ]);
+                return response()->json(['status' => 'success', 'message' => 'Password reset successfully']);
+            } else {
+                return response()->json(['status' => 'danger', 'message' => 'Invalid Password']);
+            }
+        }
+
+        return view('forgot-password');
+    }
+
     public function reset_password(Request $request){
 
         if($request->ajax()){

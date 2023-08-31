@@ -379,7 +379,7 @@ $(document).ready(function () {
                 </div>
             </div>`);
         }
-        // ts_model_id = new TomSelect('#register-form [name="model_id"]');
+        ts_model_id = new TomSelect('#register-form [name="model_id"]');
 
         if (typeof callback === "function") callback();
         else $('#register-form').find('[name="ddd_id"]').trigger("change");
@@ -442,9 +442,9 @@ $(document).ready(function () {
                 method: 'GET',
                 success: function(data) {
                     $div.append(data.record);
-                    // ts_model_id.clear();
-                    // ts_model_id.clearOptions();
-                    // ts_model_id.sync();
+                    ts_model_id.clear();
+                    ts_model_id.clearOptions();
+                    ts_model_id.sync();
                     if (typeof callback === "function")
                         callback();
                 },

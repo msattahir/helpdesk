@@ -1,5 +1,5 @@
 @php
-    $page_title = "Log In";
+    $page_title = "Forgot Password";
 @endphp
 
 <x-auth-layout :page_title="@$page_title">
@@ -11,40 +11,25 @@
         <div class="text-center">
             <div class="mb-5">
                 <h1 class="display-5">
-                    <i class="bi-box-arrow-in-right">&nbsp;</i>
-                    Log In
+                    <i class="bi-shield-lock">&nbsp;</i>
+                    {{ $page_title }}
                 </h1>
+                <p>Enter your official e-mail address registered on the system and we'll send you instructions to reset your password.</p>
             </div>
         </div>
         <hr>
 
         <div id="response" class="mb-4"></div>
 
-        <div class="mb-4">
-            <label class="form-label">Staff No</label>
-            <input type="text" class="form-control form-control-lg" name="staff_no" placeholder="Staff No" required>
-        </div>
-
         <div class="mb-10">
-            <label class="form-label w-100">
-                <span class="d-flex justify-content-between align-items-center">
-                    <span>Password</span>
-                    <a class="form-label-link mb-0"
-                        href="/forgot-password">Forgot
-                        Password?</a>
-                </span>
-            </label>
-
-            <div class="input-group input-group-merge">
-                <input type="password" class="form-control form-control-lg" name="password" placeholder="Password">
-                <button type="button" class="input-group-append input-group-text toggle-password">
-                    <i class="bi-eye-slash"></i>
-                </button>
-            </div>
+            <label class="form-label">E-mail Address</label>
+            <input type="text" class="form-control form-control-lg" name="email" placeholder="Email Address" required>
         </div>
 
         <div class="d-grid mb-8">
             <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+
+            <x-login-link />
         </div>
     </form>
 </x-auth-layout>
