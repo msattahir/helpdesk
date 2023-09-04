@@ -29,9 +29,9 @@
             <label class="form-label w-100">
                 <span class="d-flex justify-content-between align-items-center">
                     <span>Password</span>
-                    <a class="form-label-link mb-0"
+                    {{-- <a class="form-label-link mb-0"
                         href="/forgot-password">Forgot
-                        Password?</a>
+                        Password?</a> --}}
                 </span>
             </label>
 

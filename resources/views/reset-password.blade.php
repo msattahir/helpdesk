@@ -53,6 +53,8 @@
 
         <div class="d-grid my-8">
             <button type="submit" class="btn btn-primary btn-lg">{{@$page_title}}</button>
+
+            <x-login-link />
         </div>
     </form>
 </x-auth-layout>

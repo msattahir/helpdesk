@@ -12,7 +12,7 @@ Route::get('/mailable', function () {
 Route::view('/error', 'error');
 Route::group(['middleware' => ['guest']], function() {
     Route::match(['get','post'],'/login','AuthController@login')->name('login');
-    Route::match(['get','post'],'/forgot-password','AuthController@reset_password')->name('forgot-password');
+    Route::match(['get','post'],'/forgot-password','AuthController@forgot_password')->name('forgot-password');
     Route::match(['get','post'],'/reset-password','AuthController@reset_password')->name('reset-password');
 });
 
