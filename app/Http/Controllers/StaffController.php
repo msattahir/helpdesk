@@ -37,9 +37,7 @@ class StaffController extends Controller
                     $query->where('floor', $floor);
                 });
             }
-            $data = $query
-                ->latest()
-                ->get();
+            $data = $query->latest();
 
             return DataTables::of($data)
             ->addIndexColumn()

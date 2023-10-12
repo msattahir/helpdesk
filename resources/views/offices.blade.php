@@ -42,6 +42,7 @@
             @php
             $attrs = 'data-id="row.id"
                 data-office_no="row.office_no"
+                data-description="row.description"
                 data-location_id="row.location_id"
                 data-ddd_id="row.ddd_id"';
             @endphp
@@ -82,6 +83,14 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-sm-4">
+                        <label class="form-label">Description</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="description" placeholder="Description" maxlength="50"/>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4">
                         <label class="form-label">Location</label>
                     </div>
                     <div class="col-sm-8">
@@ -118,7 +127,16 @@
 $(document).ready(function () {
     initialize_datatable('#records-table', columns = [
         {title: '#', data: 'DT_RowIndex', width: '1px', orderable: false, searchable: false},
-        {title: 'Office No', data: 'office_no', name: 'office_no'},
+        {
+            title: 'Office',
+            data: 'office_no',
+            name: 'office_no',
+            render: function (data, type, row){
+                return replace_slots($('#t-block').html(), [
+                    row.office_no, row.description
+                ]);
+            }
+        },
         {title: 'Location', data: 'location.name', name: 'location.name'},
         {data: 'location_id', name: 'location_id', visible: false},
         {
@@ -131,6 +149,7 @@ $(document).ready(function () {
                 ]);
             }
         },
+        {data: 'description', name: 'description', visible: false},
         {data: 'ddd_id', name: 'ddd_id', visible: false},
         {data: 'ddd.name', name: 'ddd.name', visible: false},
 
@@ -159,6 +178,7 @@ $(document).ready(function () {
 
             $('#register-form').find('[name="id"]').val($(opener).data('id'));
             $('#register-form').find('[name="office_no"]').val($(opener).data('office_no'));
+            $('#register-form').find('[name="description"]').val($(opener).data('description'));
             $('#register-form').find('[name="ddd_id"]').val($(opener).data('ddd_id'));
             $('#register-form').find('[name="location_id"]').val($(opener).data('location_id'));
 

@@ -55,8 +55,7 @@ class ItemRequestController extends Controller
             }
 
             $data = $query
-            ->orderBy('time', 'DESC')
-            ->get();
+            ->orderBy('time', 'DESC');
 
             return DataTables::of($data)
             ->addIndexColumn()

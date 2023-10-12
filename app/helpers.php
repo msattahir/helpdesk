@@ -9,10 +9,14 @@ use App\Models\Office;
 use App\Models\RequestCategory;
 use Illuminate\Support\Facades\Hash;
 
+if (!function_exists('number_with_commas')) {
 function number_with_commas($num, $sign=true, $include_zero=false){
     if($num == 0) return ($include_zero ? (($sign ? '₦' : '').'0.00') : '');
     else return ($sign ? '₦' : '').number_format((float)$num, 2, '.', ',');
 }
+}
+
+if (!function_exists('integer_format')) {
 function integer_format($num, $include_zero=false){
     $num = (int)$num + 0;
     if($num == 0){
@@ -27,16 +31,25 @@ function integer_format($num, $include_zero=false){
         return number_format($num, $dp, '.', ',');
     }
 }
+}
+
+if (!function_exists('reverse_number_with_commas')) {
 function reverse_number_with_commas($num) {
     $num = str_replace('&#8358;', '', $num);
     return (float)preg_replace('/[^0-9.\-]/', '', $num);
 }
+}
+
+if (!function_exists('format_count')) {
 function format_count($count){
     if($count > 0){
         return '<span class="badge bg-primary rounded-pill ms-1">'.$count.'</span>';
     }
     return '';
 }
+}
+
+if (!function_exists('format_label')) {
 function format_label($label){
     if(in_array($label, ["Pending", "Blocked", "Allocated"])){
         return '<span class="badge bg-soft-warning text-warning">
@@ -57,17 +70,25 @@ function format_label($label){
     }
     return $label;
 }
+}
+
+if (!function_exists('format_date_time')) {
 function format_date_time($timestamp){
     $timestamp = strtotime($timestamp);
 
     return '<h5>' . date('Y-m-d', $timestamp) . '</h5>' . date('h:i A', $timestamp);
 }
+}
+
+if (!function_exists('transform_time')) {
 function transform_time($timestamp){
     $timestamp = strtotime($timestamp);
 
     return '<h5>'. date('Y-m-d', $timestamp) . '</h5>' . date('h:i:s A', $timestamp);
 }
+}
 
+if (!function_exists('get_item_category_options')) {
 function get_item_category_options($default = ""){
     $return = "";
     $options = ["Worktool", "Consumable"];
@@ -79,7 +100,9 @@ function get_item_category_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_distribute_to_options')) {
 function get_distribute_to_options($default = ""){
     $return = "";
     $options = ["Staff", "Office"];
@@ -95,7 +118,9 @@ function get_distribute_to_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_returned_item_options')) {
 function get_returned_item_options($default = ""){
     $return = "";
     $options = [];
@@ -113,7 +138,9 @@ function get_returned_item_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_item_options')) {
 function get_item_options($default = ""){
     $return = "";
     $options = [];
@@ -131,7 +158,9 @@ function get_item_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_item_name_options')) {
 function get_item_name_options($default = ""){
     $return = "";
     $options = [
@@ -156,7 +185,9 @@ function get_item_name_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_request_category_options')) {
 function get_request_category_options($args = []){
     $default = @$args['default'];
     $parent_id = @$args['parent_id'];
@@ -181,7 +212,9 @@ function get_request_category_options($args = []){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_request_status_options')) {
 function get_request_status_options($default = ""){
     $return = "";
     $options = ["Escalated", "Resolved", "Unresolved"];
@@ -197,7 +230,9 @@ function get_request_status_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_distribution_status_options')) {
 function get_distribution_status_options($default = ""){
     $return = "";
     $options = ["Allocated", "Configured", "Installed", "Distributed"];
@@ -213,7 +248,9 @@ function get_distribution_status_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_distribution_condition_options')) {
 function get_distribution_condition_options($default = ""){
     $return = "";
     $options = ["New", "Returned"];
@@ -226,7 +263,9 @@ function get_distribution_condition_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_ordinal')) {
 function get_ordinal($number) {
     $ends = array('th','st','nd','rd','th','th','th','th','th','th');
     if ((($number % 100) >= 11) && (($number%100) <= 13))
@@ -234,7 +273,9 @@ function get_ordinal($number) {
     else
         return $number. $ends[$number % 10];
 }
+}
 
+if (!function_exists('get_floor_options')) {
 function get_floor_options($default = ""){
     $return = "";
     $options = [];
@@ -254,7 +295,9 @@ function get_floor_options($default = ""){
 
     return $return;
 }
+}
 
+if (!function_exists('get_ddd_category_options')) {
 function get_ddd_category_options($default = ""){
     $return = "";
     $options = ["Directorate", "Division", "Department"];
@@ -266,7 +309,9 @@ function get_ddd_category_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_ddd_options')) {
 function get_ddd_options($default = ""){
     $return = "";
     $options = [];
@@ -282,7 +327,9 @@ function get_ddd_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_location_options')) {
 function get_location_options($default = ""){
     $return = "";
     $options = [];
@@ -297,7 +344,9 @@ function get_location_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_account_status_options')) {
 function get_account_status_options($default = ""){
     $return = "";
     $options = ["Active", "Blocked", "Retired"];
@@ -309,7 +358,9 @@ function get_account_status_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_account_role_options')) {
 function get_account_role_options($default = ""){
     $return = "";
     $options = [
@@ -330,7 +381,9 @@ function get_account_role_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_filter_form')) {
 function get_filter_form($selects = [], $type = ""){
     $div = '<form id="filter-form"><div class="row">';
     $i = 1;
@@ -375,7 +428,9 @@ function get_filter_form($selects = [], $type = ""){
     </form>';
     return $div;
 }
+}
 
+if (!function_exists('get_office_options')) {
 function get_office_options($args = []){
     $default = @$args['default'];
     $ddd_id = @$args['ddd_id'];
@@ -399,7 +454,9 @@ function get_office_options($args = []){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_staff_options')) {
 function get_staff_options($args = []){
     $default = @$args['default'];
     $ddd_id = @$args['ddd_id'];
@@ -424,7 +481,9 @@ function get_staff_options($args = []){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_report_type_options')) {
 function get_report_type_options($default = ""){
     $role = auth()->user()->role;
 
@@ -445,7 +504,9 @@ function get_report_type_options($default = ""){
     }
     return $return;
 }
+}
 
+if (!function_exists('get_report_by_options')) {
 function get_report_by_options($default = ""){
     $return = "";
     $options = ["Categories", "Floors", "DDDs", "Staff"];
@@ -457,8 +518,10 @@ function get_report_by_options($default = ""){
     }
     return $return;
 }
+}
 
 /** QUERY FUNCTIONS */
+if (!function_exists('delete_catch_error')) {
 function delete_catch_error($e, $label, $fks, $fk_value){
     if($e->errorInfo[0] == '23000'){
         $tables_list = get_foreign_tables_list($fks, $fk_value);
@@ -474,7 +537,9 @@ function delete_catch_error($e, $label, $fks, $fk_value){
 
     return response()->json(['status' => 'danger', 'message' => 'Error occurred while deleting record', 'error' => $e]);
 }
+}
 
+if (!function_exists('get_foreign_tables')) {
 function get_foreign_tables($fks, $fk_value){
     return DB::table('information_schema.KEY_COLUMN_USAGE')
         ->select(array('table_name', 'column_name'))
@@ -483,7 +548,9 @@ function get_foreign_tables($fks, $fk_value){
         ->where('table_schema', env('DB_DATABASE'))
         ->get();
 }
+}
 
+if (!function_exists('get_foreign_tables_list')) {
 function get_foreign_tables_list($fks, $fk_value){
     $tables = get_foreign_tables($fks, $fk_value);
 
@@ -513,7 +580,9 @@ function get_foreign_tables_list($fks, $fk_value){
     }
     return $tables_list;
 }
+}
 
+if (!function_exists('record_changed')) {
 function record_changed($model, $id, $form_data){
     $model = $model::find($id);
     $intersecting_columns = array_intersect_key($form_data, array_flip($model->getFillable()));
@@ -540,7 +609,9 @@ function record_changed($model, $id, $form_data){
     }
     return false;
 }
+}
 
+if (!function_exists('soft_update')) {
 function soft_update($model, $id, $form_data, $user_id, $valid_until){
     $record = $model::find($id);
     if(@$record->status != "Pending"){
@@ -555,7 +626,9 @@ function soft_update($model, $id, $form_data, $user_id, $valid_until){
 
     return $model::find($id)->update($form_data);
 }
+}
 
+if (!function_exists('soft_delete')) {
 function soft_delete($model, $id, $user_id, $valid_until, $fks = [], $fk_value = ""){
     if(count($fks) > 0){
         $tables = get_foreign_tables($fks, $fk_value);
@@ -581,7 +654,9 @@ function soft_delete($model, $id, $user_id, $valid_until, $fks = [], $fk_value =
         'valid_until' => $valid_until
     ]);
 }
+}
 
+if (!function_exists('analyse_query')) {
 function analyse_query($query){
     $sqlQuery = $query->toSql();
 
@@ -605,7 +680,9 @@ function analyse_query($query){
                     X-Execution-Time: {$executionTime}"
     ]);
 }
+}
 
+if (!function_exists('check_route_access')) {
 function check_route_access($route){
     $user = auth()->user();
 
@@ -615,7 +692,9 @@ function check_route_access($route){
 
     return false;
 }
+}
 
+if (!function_exists('get_authorized_routes')) {
 function get_authorized_routes($user){
     $role = $user->role;
 
@@ -660,12 +739,17 @@ function get_authorized_routes($user){
 
     return array_merge($common_routes, $specific_routes);
 }
+}
 
 // Table cell template
+
+if (!function_exists('td_block_template')) {
 function td_block_template($args = []){
     return '<h5>'. @$args[0] . '</h5>' . @$args[1];
 }
+}
 
+if (!function_exists('td_action_template')) {
 function td_action_template($args = []){
     $return = '<button class="btn btn-primary btn-xs dropdown dropdown-toggle" type="button" id="dropdownMenuButtonWithIcon" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi-sliders"></i>
@@ -703,7 +787,9 @@ function td_action_template($args = []){
 
     return $return;
 }
+}
 
+if (!function_exists('convertArrayToBcrypt')) {
 function convertArrayToBcrypt(array $data){
     $hashedData = '';
 
@@ -713,4 +799,5 @@ function convertArrayToBcrypt(array $data){
     }
 
     return $hashedData;
+}
 }

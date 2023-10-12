@@ -23,8 +23,7 @@ class InventoryController extends Controller
             ->totalByStatus('Distributed')
             ->totalByStatus('Returned')
             ->orderBy('name')
-            ->orderBy('model')
-            ->get();
+            ->orderBy('model');
 
             return DataTables::of($data)
             ->addIndexColumn()
@@ -97,8 +96,7 @@ class InventoryController extends Controller
                     $query->select('id', 'staff_no', 'name');
                 }
             ])
-            ->select('id', 'item_id', 'staff_id', 'quantity', 'created_at')
-            ->get();
+            ->select('id', 'item_id', 'staff_id', 'quantity', 'created_at');
 
 
             return DataTables::of($data)

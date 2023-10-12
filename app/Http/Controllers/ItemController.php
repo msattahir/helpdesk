@@ -16,7 +16,7 @@ class ItemController extends Controller
     public function index(Request $request){
         if($request->ajax())
         {
-            $data = Item::latest()->get();
+            $data = Item::latest();
 
             return DataTables::of($data)
             ->addIndexColumn()

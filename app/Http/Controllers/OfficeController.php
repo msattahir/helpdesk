@@ -31,9 +31,7 @@ class OfficeController extends Controller
                 });
             }
 
-            $data = $query
-                ->latest()
-                ->get();
+            $data = $query->latest();
 
             return DataTables::of($data)
             ->addIndexColumn()
@@ -59,6 +57,7 @@ class OfficeController extends Controller
                 'required',
                 'max:4'
             ],
+            'description'  => 'max:50',
             'ddd_id'  => 'required|exists:ddds,id',
             'location_id'  => 'required|exists:locations,id'
         ];

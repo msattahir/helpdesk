@@ -8,9 +8,10 @@ use App\Models\HelpdeskSupport;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Mail;
+use App\Events\HelpdeskRequestSubmitted;
 
 
 class HelpdeskRequestController extends Controller
@@ -54,8 +55,7 @@ class HelpdeskRequestController extends Controller
             ])
             ->whereHas('staff', $staff_condition)
             ->whereHas('ddd', $ddd_condition)
-            ->latest()
-            ->get();
+            ->latest();
 
             return DataTables::of($data)
             ->addIndexColumn()
@@ -93,7 +93,7 @@ class HelpdeskRequestController extends Controller
 
         $helpdesk_request = HelpdeskRequest::create($form_data);
 
-        HelpdeskSupport::create([
+        $first_support = HelpdeskSupport::create([
             'helpdesk_request_id' => $helpdesk_request->id,
             'status' => 'Pending',
             'staff_id' => $form_data['support_staff_id'],
@@ -101,14 +101,7 @@ class HelpdeskRequestController extends Controller
             'time' => $timestamp
         ]);
 
-        // Send Mail
-        // $mail_staff = \App\Models\Staff::find($form_data['support_staff_id']);
-        // $mail_ddd = \App\Models\Ddd::find($form_data['ddd_id']);
-
-        // Mail::to($mail_staff)->send(new \App\Mail\HelpdeskSupport(
-        //     $mail_staff,
-        //     $mail_ddd)
-        // );
+        HelpdeskRequestSubmitted::dispatch($helpdesk_request, $first_support);
 
         return response()->json([
             'status' => 'success',

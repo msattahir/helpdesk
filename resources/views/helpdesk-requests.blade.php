@@ -348,9 +348,12 @@ $(document).ready(function () {
                 method: 'GET',
                 success: function(data) {
                     $div.append(data.record);
-                    ts_staff_id.clear();
-                    ts_staff_id.clearOptions();
-                    ts_staff_id.sync();
+
+                    if(url == '/get-options/staff/'){
+                        ts_staff_id.clear();
+                        ts_staff_id.clearOptions();
+                        ts_staff_id.sync();
+                    }
                     if (typeof callback === "function")
                         callback();
                 },

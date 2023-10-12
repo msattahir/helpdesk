@@ -11,8 +11,7 @@ class ActivityLogController extends Controller
     public function index(Request $request){
         if($request->ajax()){
             $data = ActivityLog::with(['staff.ddd'])
-            ->latest()
-            ->get();
+            ->latest();
 
             return DataTables::of($data)
             ->addIndexColumn()

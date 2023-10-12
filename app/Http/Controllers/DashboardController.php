@@ -108,8 +108,7 @@ class DashboardController extends Controller
             $query->select('id', 'staff_no', 'name');
         }])
         ->where('staff_id', auth()->id())
-        ->latest()
-        ->get();
+        ->latest();
 
         return DataTables::of($data)
         ->addIndexColumn()

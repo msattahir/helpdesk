@@ -18,9 +18,9 @@ class DDDController extends Controller
         {
             if(auth()->user()->role == "Floor Admin"){
                 $floor = auth()->user()->ddd->floor;
-                $data = Ddd::where('floor', $floor)->latest()->get();
+                $data = Ddd::where('floor', $floor)->latest();
             }else{
-                $data = Ddd::latest()->get();
+                $data = Ddd::latest();
             }
 
             return DataTables::of($data)

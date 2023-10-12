@@ -55,8 +55,7 @@ class ItemDistributionController extends Controller
             ])
             // ->where($staff_condition)
             // ->whereHas('ddd', $ddd_condition)
-            ->latest()
-            ->get();
+            ->latest();
 
             return DataTables::of($data)
             ->addIndexColumn()

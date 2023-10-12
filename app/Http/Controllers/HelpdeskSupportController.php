@@ -57,8 +57,7 @@ class HelpdeskSupportController extends Controller
             }
 
             $data = $query
-            ->latest()
-            ->get();
+            ->latest();
 
             return DataTables::of($data)
             ->addIndexColumn()

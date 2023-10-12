@@ -9,7 +9,7 @@ class Office extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['office_no', 'ddd_id', 'location_id'];
+    protected $fillable = ['office_no', 'description', 'ddd_id', 'location_id'];
 
     public function distributions(){
         return $this->morphMany(ItemDistribution::class, 'distributionable');
