@@ -17,13 +17,20 @@ class InventoryController extends Controller
 
     public function index(Request $request){
         if($request->ajax()){
-            $data = Item::totalByStatus('Allocated')
+
+            $sub_query = Item::inventoryTotal()
+            ->totalByStatus('Allocated')
             ->totalByStatus('Configured')
             ->totalByStatus('Installed')
             ->totalByStatus('Distributed')
             ->totalByStatus('Returned')
+            ->totalByStatus('Returned', '<>', 'distribution_total')
             ->orderBy('name')
             ->orderBy('model');
+
+            $data = DB::table($sub_query)
+            ->select('*')
+            ->selectRaw('inventory_total - distribution_total AS inventory_balance');
 
             return DataTables::of($data)
             ->addIndexColumn()

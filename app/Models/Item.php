@@ -13,7 +13,7 @@ class Item extends Model
 {
     use HasFactory;
 
-    protected $appends = ['distribution_total', 'inventory_total', 'inventory_balance'];
+    // protected $appends = ['distribution_total', 'inventory_total', 'inventory_balance'];
 
     protected $fillable = ['name', 'model', 'category'];
 
@@ -36,23 +36,30 @@ class Item extends Model
         }]);
     }
 
-    public function getInventoryTotalAttribute()
+    public function scopeInventoryTotal($query)
     {
-        return $this->inventory()->sum('quantity');
+        return $query->withSum(['inventory AS inventory_total' => fn ($query) =>
+            $query->select(DB::raw('COALESCE(SUM(quantity), 0)'))
+        ], 'quantity');
     }
 
-    public function getDistributionTotalAttribute()
-    {
-        return $this->distribution_items()->with('last_distribution')->count();
-    }
+    // public function getInventoryTotalAttribute()
+    // {
+    //     return $this->inventory()->sum('quantity');
+    // }
 
-    public function getInventoryBalanceAttribute()
-    {
-        $inventory_total = $this->inventory_total;
-        $distribution_total = $this->distribution_total;
+    // public function getDistributionTotalAttribute()
+    // {
+    //     return $this->distribution_items()->with('last_distribution')->count();
+    // }
 
-        return $inventory_total - $distribution_total;
-    }
+    // public function getInventoryBalanceAttribute()
+    // {
+    //     $inventory_total = $this->inventory_total;
+    //     $distribution_total = $this->distribution_total;
+
+    //     return $inventory_total - $distribution_total;
+    // }
 
     public function requested(){
         return $this->hasMany(ItemRequest::class, 'item_id');

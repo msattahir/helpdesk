@@ -12,7 +12,7 @@ class DistributionItem extends Model
     protected $fillable = ['item_id', 'reference_no'];
 
     public function item(){
-        return $this->belongsTo(Item::class, 'item_id')->orderBy('name')->orderBy('model');
+        return $this->belongsTo(Item::class, 'item_id');
     }
 
     public function last_distribution(){

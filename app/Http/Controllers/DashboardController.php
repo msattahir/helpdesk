@@ -63,9 +63,14 @@ class DashboardController extends Controller
 
         $inventory = [];
         if(auth()->user()->role == "Admin"){
-            $inventory = Item::withCount('distribution_items')
-                ->with('inventory')
+            $sub_query = Item::withCount('distribution_items')
+                ->inventoryTotal()
+                ->totalByStatus('Returned', '<>', 'distribution_total')
+                ->with('inventory');
+
+            $inventory = DB::table($sub_query)
                 ->selectRaw('CONCAT(name, " - ", model) AS name')
+                ->selectRaw('inventory_total - distribution_total AS inventory_balance')
                 ->get();
         }
 
