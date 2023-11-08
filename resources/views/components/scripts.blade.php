@@ -193,12 +193,14 @@
 
             update_filter_count();
         });
-        $(document).on("click", "#filter-form :reset", function(e) {
-            date_from = '';
-            date_to = '';
-            datatable.columns().search( '' ).draw();
+        $(document).on("reset", "#filter-form", function(e) {
+            setTimeout(function() {
+                date_from = '';
+                date_to = '';
+                datatable.columns().search( '' ).draw();
 
-            $('#filter-counter').html("");
+                $('#filter-counter').html("");
+            }, 1);
         });
 
         var update_entries = true;
