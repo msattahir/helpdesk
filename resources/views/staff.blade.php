@@ -13,12 +13,12 @@
             <x-filter>
             {!! get_filter_form([
                 [
-                    'name' => 'ddd.id',
+                    'name' => 'ddd_id',
                     'label' => 'DDD',
                     'options' => get_ddd_options()
                 ],
                 [
-                    'name' => 'location.id',
+                    'name' => 'location_id',
                     'label' => 'Location',
                     'options' => get_location_options()
                 ],
@@ -257,9 +257,9 @@ $(document).ready(function () {
                 ]);
             }
         },
-        {name: 'ddd.id', data: 'ddd.id', visible: false},
+        {name: 'ddd_id', data: 'ddd_id', visible: false},
         {name: 'ddd.name', data: 'ddd.name', visible: false},
-        {name: 'location.id', data: 'location.id', visible: false},
+        {name: 'location_id', data: 'location_id', visible: false},
         {name: 'location.name', data: 'location.name', visible: false},
 
         {title: 'Role', data: 'role', name: 'role', className: 'text-nowrap'},
@@ -278,7 +278,8 @@ $(document).ready(function () {
                 return replace_template_values($('#t-action').html(), row);
             },
             orderable: false,
-            searchable: false
+            searchable: false,
+            className: 'no-export'
         },
     ]);
 

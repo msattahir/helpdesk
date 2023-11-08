@@ -14,6 +14,8 @@ class Staff extends Authenticatable
 
     protected $table = 'staff';
 
+    protected $hidden = ['password'];
+
     protected $fillable = ['staff_no', 'name', 'email', 'ddd_id', 'location_id', 'role', 'status', 'password'];
 
     protected static function booted(){
@@ -23,15 +25,15 @@ class Staff extends Authenticatable
         if($controller_name != "AuthController") {
             static::addGlobalScope('select', function ($query) {
                 $query->select(
-                    'id',
+                    'staff.id',
                     'staff_no',
-                    'name',
-                    'email',
-                    'ddd_id',
-                    'location_id',
-                    'role',
-                    'status',
-                    'created_at'
+                    'staff.name',
+                    'staff.email',
+                    'staff.ddd_id',
+                    'staff.location_id',
+                    'staff.role',
+                    'staff.status',
+                    'staff.created_at'
                 );
             });
         }

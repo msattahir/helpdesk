@@ -9,7 +9,6 @@
 <x-layout :page_title="$label_p" :add_button_label="$add_button_label">
     <div class="card">
         <x-table-header>
-
             <x-filter>
             {!! get_filter_form([
                 [
@@ -18,22 +17,29 @@
                     'options' => get_distribute_to_options('model')
                 ],
                 [
-                    'name' => 'distributionable.id',
+                    'div-id' => 'staff-div',
+                    'name' => 'staff_id',
                     'label' => 'Staff',
                     'options' => get_staff_options()
                 ],
                 [
-                    'name' => 'distributionable.ddd.id',
+                    'div-id' => 'office-div',
+                    'name' => 'office_id',
+                    'label' => 'Office No',
+                    'options' => get_office_options()
+                ],
+                [
+                    'name' => 'ddd_id',
                     'label' => 'DDD',
                     'options' => get_ddd_options()
                 ],
                 [
-                    'name' => 'distributionable.ddd.floor',
+                    'name' => 'ddd_floor',
                     'label' => 'Floor',
                     'options' => get_floor_options()
                 ],
                 [
-                    'name' => 'distribution_item.item.id',
+                    'name' => 'item_id',
                     'label' => 'Item',
                     'options' => get_item_options()
                 ],
@@ -41,10 +47,19 @@
                     'name' => 'status',
                     'label' => 'Status',
                     'options' => get_distribution_status_options("Filter")
+                ],
+                [
+                    'name' => 'date_from',
+                    'type' => 'date',
+                    'label' => 'Date From'
+                ],
+                [
+                    'name' => 'date_to',
+                    'type' => 'date',
+                    'label' => 'Date To'
                 ]
             ]) !!}
             </x-filter>
-
         </x-table-header>
 
         <div id="response" class="m-2"></div>
@@ -69,11 +84,11 @@
         @if(check_route_access($base_url_name . '.delete'))
             @php
                 $attrs = 'data-id="row.id"
-                    data-ddd_id="row.distributionable.ddd_id"
+                    data-ddd_id="row.ddd_id"
                     data-model_id="row.distributionable_id"
                     data-model_type="row.distributionable_type"
-                    data-item_id="row.distribution_item.item_id"
-                    data-reference_no="row.distribution_item.reference_no"
+                    data-item_id="row.item_id"
+                    data-reference_no="row.item_reference_no"
                     data-distribution_item_id="row.distribution_item_id"
                     data-remark="row.remark"
                     data-status="row.status"
@@ -189,70 +204,60 @@
 
 <script>
 $(document).ready(function () {
-    initialize_datatable('#records-table', columns = [
+    initialize_datatable('#records-table',
+    columns = [
         {title: '#', data: 'DT_RowIndex', orderable: false, searchable: false},
         {
             title: 'Cat.',
-            name: 'distributionable_type',
+            name: 'category',
+            data: 'category',
             className: 'text-nowrap',
-            render: function (data, type, row){
-                return row.distributionable_type.replace("App\\Models\\", '');
-            }
         },
+        {name: 'distributionable_type', data: 'distributionable_type', visible: false},
+
         {
             title: 'Ref.',
-            name: 'staff_no',
+            name: 'receiver_no',
+            className: 'text-nowrap',
             render: function (data, type, row){
-                if(row.distributionable && row.distributionable.staff_no){
-                    return replace_slots($('#t-block').html(), [
-                        row.distributionable.staff_no, row.distributionable.name
-                    ]);
-                }
                 return replace_slots($('#t-block').html(), [
-                    row.distributionable.office_no, 'Office No'
+                    row.receiver_no, row.receiver_name
                 ]);
             }
         },
-        {name: 'distributionable.id', data: 'distributionable.id', visible: false},
-        {name: 'distributionable.staff_no', data: null, visible: false},
-        {name: 'distributionable.name', data: null, visible: false},
-        {name: 'distributionable.office_no', data: null, visible: false},
+        {data: 'staff_id', name: 'staff_id', visible: false},
+        {data: 'office_id', name: 'office_id', visible: false},
+        {name: 'receiver_name', data: 'receiver_name', visible: false},
 
         {
             title: 'DDD',
-            data: 'distributionable.ddd.short',
-            name: 'distributionable.ddd.short',
+            name: 'ddd_name',
             className: 'text-nowrap',
             render: function (data, type, row){
-                let location = row.distributionable.location.name;
-                if(row.distributionable.location.id == 1){
-                    location = row.distributionable.ddd.floor;
-                }
                 return replace_slots($('#t-block').html(), [
-                    row.distributionable.ddd.short, location
+                    row.ddd_name, row.ddd_location
                 ]);
             }
         },
-        {data: 'distributionable.ddd.id', name: 'distributionable.ddd.id', visible: false},
-        {data: 'distributionable.ddd.floor', name: 'distributionable.ddd.floor', visible: false},
-        {data: 'distributionable.location.name', name: 'distributionable.location.name', visible: false},
+        {data: 'ddd_id', name: 'ddd_id', visible: false},
+        {data: 'ddd_floor', name: 'ddd_floor', visible: false},
+        {data: 'ddd_location', name: 'ddd_location', visible: false},
 
         {
             title: 'Item',
-            data: 'distribution_item.item.name',
-            name: 'distribution_item.item.name',
+            name: 'item_name',
             className: 'text-nowrap',
             render: function (data, type, row){
                 return replace_slots($('#t-item').html(), [
-                    row.distribution_item.item.name,
-                    row.distribution_item.item.model,
-                    row.distribution_item.reference_no
+                    row.item_name,
+                    row.item_model,
+                    row.item_reference_no
                 ]);
             }
         },
-        {data: 'distribution_item.item.id', name: 'distribution_item.item.id', visible: false},
-        {data: 'distribution_item.item.model', name: 'distribution_item.item.model', visible: false},
-        {data: 'distribution_item.reference_no', name: 'distribution_item.reference_no', visible: false},
+        {data: 'item_id', name: 'item_id', visible: false},
+        {data: 'item_model', name: 'item_model', visible: false},
+        {data: 'item_reference_no', name: 'item_reference_no', visible: false},
 
         {
             title: 'Status',
@@ -262,7 +267,7 @@ $(document).ready(function () {
                 return format_label(row.status);
             }
         },
-        {title: 'Remark', data: 'remark', width: '20px'},
+        {title: 'Remark', className: 'text-nowrap', data: 'remark', width: '20px'},
         {
             title: 'Date/Time',
             data: 'time',
@@ -279,7 +284,8 @@ $(document).ready(function () {
                 return replace_template_values($('#t-action').html(), row);
             },
             orderable: false,
-            searchable: false
+            searchable: false,
+            className: 'no-export'
         },
     ]);
 
@@ -453,6 +459,46 @@ $(document).ready(function () {
                 }
             });
         });
+    });
+
+    $('#office-div').hide();
+    $(document).on('change', '#filter-form [name="distributionable_type"]', function(e){
+        if($(this).val() == "App\\Models\\Office"){
+            $('#staff-div').hide();
+            $('#office-div').show();
+
+            $('#filter-form [name="staff_id"]').val('');
+            datatable.column('staff_id:name').search('').draw();
+        }else{
+            $('#staff-div').show();
+            $('#office-div').hide();
+
+            $('#filter-form [name="office_id"]').val('');
+            datatable.column('office_id:name').search('').draw();
+        }
+    });
+
+    $(document).on('change', '#filter-form [name="date_from"]', function(e){
+        if($(this).val() == ""){
+            date_from = "";
+            $('#filter-form [name="date_to"]').attr('min', '2010-04-22');
+        }else{
+            date_from = $(this).val() + ' 00:00:00';
+            $('#filter-form [name="date_to"]').attr('min', $(this).val());
+        }
+        datatable.ajax.reload();
+    });
+
+    $(document).on('change', '#filter-form [name="date_to"]', function(e){
+        var today = new Date();
+        if($(this).val() == ""){
+            date_to = "";
+            $('#filter-form [name="date_from"]').attr('max', today);
+        }else{
+            date_to = $(this).val() + ' 23:59:59';
+            $('#filter-form [name="date_from"]').attr('max', $(this).val());
+        }
+        datatable.ajax.reload();
     });
 });
 </script>

@@ -25,12 +25,12 @@
             <x-filter>
             {!! get_filter_form([
                 [
-                    'name' => 'staff.id',
+                    'name' => 'staff_id',
                     'label' => 'Staff',
                     'options' => get_staff_options()
                 ],
                 [
-                    'name' => 'ddd.id',
+                    'name' => 'ddd_id',
                     'label' => 'DDD',
                     'options' => get_ddd_options()
                 ],
@@ -40,7 +40,7 @@
                     'options' => get_floor_options()
                 ],
                 [
-                    'name' => 'request_category.parent.id',
+                    'name' => 'request_category.parent_id',
                     'label' => 'Request Category',
                     'options' => get_request_category_options()
                 ],
@@ -71,7 +71,7 @@
             $attrs = 'data-id="row.id"
                 data-ddd_id="row.ddd_id"
                 data-staff_id="row.staff_id"
-                data-parent_category_id="row.request_category.parent.id"
+                data-parent_category_id="row.request_category.parent_id"
                 data-request_category_id="row.request_category.id"
                 data-description="row.description"
                 data-support_staff_id="row.first_support.staff_id"';
@@ -200,8 +200,8 @@ $(document).ready(function () {
         {title: '#', data: 'DT_RowIndex', orderable: false, searchable: false},
         {
             title: 'Staff',
-            data: 'staff.staff_no',
             name: 'staff.staff_no',
+            data: 'staff.staff_no',
             render: function (data, type, row){
                 var template = '<a href="/{{ $base_url_name }}/' + row.id + '">' +
                     $('#t-block').html() +
@@ -212,7 +212,7 @@ $(document).ready(function () {
                 ]);
             }
         },
-        {data: 'staff.id', name: 'staff.id', visible: false},
+        {data: 'staff_id', name: 'staff_id', visible: false},
         {data: 'staff.name', name: 'staff.name', visible: false},
 
         {
@@ -230,7 +230,7 @@ $(document).ready(function () {
                 ]);
             }
         },
-        {data: 'ddd.id', name: 'ddd.id', visible: false},
+        {data: 'ddd_id', name: 'ddd_id', visible: false},
         {data: 'ddd.floor', name: 'ddd.floor', visible: false},
 
         {
@@ -243,7 +243,7 @@ $(document).ready(function () {
                 ]);
             }
         },
-        {data: 'request_category.parent.id', name: 'request_category.parent.id', visible: false},
+        {data: 'request_category.parent_id', name: 'request_category.parent_id', visible: false},
         {data: 'request_category.name', name: 'request_category.name', visible: false},
 
         {title: 'Description', data: 'description', width: '20px'},
@@ -287,7 +287,8 @@ $(document).ready(function () {
                 return replace_template_values($('#t-action').html(), row);
             },
             orderable: false,
-            searchable: false
+            searchable: false,
+            className: 'no-export'
         },
     ]);
 

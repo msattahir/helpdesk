@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Staff;
-use App\Models\ItemDistribution;
 use Illuminate\Http\Request;
 use App\Models\HelpdeskSupport;
 use Illuminate\Validation\Rule;
-use Yajra\DataTables\DataTables;
+use App\Models\ItemDistribution;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
+use Yajra\DataTables\Facades\DataTables;
 
 class StaffController extends Controller
 {
@@ -25,23 +25,22 @@ class StaffController extends Controller
         if($request->ajax())
         {
             $role = auth()->user()->role;
-            $query = Staff::with('ddd', 'location');
+            $data = Staff::with('ddd', 'location');
             if($role == "DDD Admin"){
                 $ddd_id = auth()->user()->ddd_id;
-                $query = $query
+                $data = $data
                 ->where('ddd_id', $ddd_id);
             }elseif($role == "Floor Admin"){
                 $floor = auth()->user()->ddd->floor;
-                $query = $query
+                $data = $data
                 ->whereHas('ddd', function ($query) use ($floor) {
                     $query->where('floor', $floor);
                 });
             }
-            $data = $query->latest();
 
-            return DataTables::of($data)
+            return DataTables::eloquent($data)
             ->addIndexColumn()
-            ->make(true);
+            ->toJson();
         }
 
         return view('staff');

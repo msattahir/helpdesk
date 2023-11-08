@@ -2,13 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/mailable', function () {
-    $ddd = App\Models\Ddd::find(1);
-    $staff = App\Models\Staff::find(1);
-
-    return new App\Mail\HelpdeskSupport($staff, $ddd);
-});
-
 Route::view('/error', 'error');
 Route::group(['middleware' => ['guest']], function() {
     Route::match(['get','post'],'/login','AuthController@login')->name('login');

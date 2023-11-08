@@ -6,12 +6,31 @@
 <script src="{{asset('assets/js/pace.min.js')}}"></script>
 <script>
     (function () {
+        $(document).on('ready', function () {
+            HSCore.components.HSDaterangepicker.init('.js-daterangepicker-clear', {
+                minDate: '04/22/2010',
+                maxDate: moment(),
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            });
+
+            $('.js-daterangepicker-clear').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+            })
+
+            $('.js-daterangepicker-clear').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('')
+            })
+        });
+    })();
+    (function () {
         localStorage.removeItem('hs_theme')
 
         window.onload = function () {
             new HSSideNav('.js-navbar-vertical-aside').init()
         }
-    })()
+    })();
 </script>
 <script>
     (function () {
@@ -48,35 +67,63 @@
     var datatable;
     var delete_id;
 
-    function initialize_datatable(table_id = '#records-table', columns = [], url = '', entries_id = '#records_per_page'){
+    var filter;
+    var date_from;
+    var date_to;
+
+    function initialize_datatable(
+        table_id = '#records-table',
+        columns = [],
+        url = '',
+        entries_id = '#records_per_page'
+    ){
 
         $(document).on('click', '.btn-close-filter', function() {
             $(this).closest('.dropdown').find('.btn-open-filter').dropdown("toggle");
         });
 
+        columns = [{name: 'id', data: 'id', visible: false}].concat(columns);
+
         HSCore.components.HSDatatables.init($(table_id), {
+            destroy: true,
             processing: true,
             serverSide: true,
+            order: [ [0, 'desc'] ],
             buttons: [
               {
                 extend: 'copy',
-                className: 'd-none'
+                className: 'd-none',
+                exportOptions: {
+                    columns: ':visible:not(.no-export)'
+                }
               },
               {
                 extend: 'excel',
-                className: 'd-none'
+                className: 'd-none',
+                exportOptions: {
+                    columns: ':visible:not(.no-export)'
+                }
               },
               {
                 extend: 'csv',
-                className: 'd-none'
+                className: 'd-none',
+                exportOptions: {
+                    columns: ':visible:not(.no-export)'
+                }
               },
               {
                 extend: 'pdf',
-                className: 'd-none'
+                className: 'd-none',
+                exportOptions: {
+                    columns: ':visible:not(.no-export)'
+                }
               },
               {
                 extend: 'print',
-                className: 'd-none'
+                className: 'd-none',
+                exportOptions: {
+                    columns: ':visible:not(.no-export)'
+                }
               },
             ],
             select: {
@@ -97,6 +144,14 @@
             },
             ajax: {
                 url: url,
+                data:function (d) {
+                    var filter_data = $('#filter-form').serializeArray();
+                    $.each(filter_data, function(k, v) {
+                        d[v.name] = v.value;
+                    });
+                    d.date_from = date_from;
+                    d.date_to = date_to;
+                }
             },
             columns: columns
         });
@@ -139,6 +194,8 @@
             update_filter_count();
         });
         $(document).on("click", "#filter-form :reset", function(e) {
+            date_from = '';
+            date_to = '';
             datatable.columns().search( '' ).draw();
 
             $('#filter-counter').html("");

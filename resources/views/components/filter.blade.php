@@ -1,5 +1,5 @@
 <div class="dropdown">
-    <button type="button" class="btn btn-white btn-sm w-100 btn-open-filter" id="usersFilterDropdown"
+    <button type="button" class="btn btn-white btn-sm w-100 btn-open-filter dropdown-toggle" id="usersFilterDropdown"
         data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         <i class="bi-filter me-1"></i> Filter <span class="badge bg-soft-dark text-dark rounded-circle ms-1" id="filter-counter"></span>
     </button>

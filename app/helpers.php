@@ -23,11 +23,13 @@ function integer_format($num, $include_zero=false){
         return $include_zero ? '0' : '';
     }else{
         $tmp = explode('.', $num);
-        if(strlen(@$tmp[1]) > 2){
-            $dp = 2;
-        }else{
-            $dp = strlen(@$tmp[1]);
-        }
+        if(isset($tmp[1])){
+            if(strlen(@$tmp[1]) > 2){
+                $dp = 2;
+            }else{
+                $dp = strlen(@$tmp[1]);
+            }
+        }else $dp = 0;
         return number_format($num, $dp, '.', ',');
     }
 }
@@ -398,22 +400,45 @@ function get_filter_form($selects = [], $type = ""){
             continue;
         }
 
+        $div_attrs = 'class="col-sm-6 mb-4"';
+        if(@$select['div-id'] != ""){
+            $div_attrs .= ' id="' . @$select['div-id'] . '"';
+        }
+
         if(@$select['type'] != ""){
-            if(in_array($select['type'], ["date", "time"])){
-                $attrs = 'type="text" onfocus="(this.type=\''.$select['type'].'\')" onfocusout="(this.type=\'text\')"';
+            if($select['type'] == "daterange"){
+                $attrs = 'type="text" class="js-daterangepicker-clear form-control
+                daterangepicker-custom-input"
+                data-hs-daterangepicker-options=\'{
+                    "autoUpdateInput": false,
+                    "locale": {
+                        "cancelLabel": "Clear",
+                        "format": "DD/MM/YYYY"
+                    },
+                    "parentEl": ".dropdown-card"
+                }\' name="'.@$select['name'].'"';
+            }elseif(in_array($select['type'], ["date", "time"])){
+                $attrs = 'type="text" onfocus="(this.type=\''.$select['type'].'\')" onfocusout="(this.type=\'text\')" class="form-control"';
+                if($select['type'] == "date"){
+                    $attrs .= ' min="2010-04-22" max="'.date("Y-m-d").'"';
+                }
             }else{
-                $attrs = 'type="'.$select['type'].'"';
+                $attrs = 'type="'.$select['type'].'" class="form-control"';
             }
-            $div .= '<div class="col-sm-6 mb-4">
+            $div .= '<div ' . $div_attrs . '>
                 <small class="text-cap text-body">'.@$select['label'].'</small>
             <div class="tom-select-custom">
-            <input '.$attrs.' data-target-column-name="'.@$select['name'].'" placeholder="'.@$select['label'].'" class="form-input" value="'.@$select['value'].'">';
+            <input '.$attrs.' name="'.@$select['name'].'" placeholder="'.@$select['label'].'" value="'.@$select['value'].'">';
         }else{
-            $div .= '<div class="col-sm-6 mb-4">
+            if(isset($select['custom-filter'])){
+                $attrs = 'name="'.@$select['name'].'" class="custom-filter form-select form-select-sm"';
+            }else{
+                $attrs = 'data-target-column-name="'.@$select['name'].'" class="js-datatable-filter form-select form-select-sm"';
+            }
+            $div .= '<div ' . $div_attrs . '>
                 <small class="text-cap text-body">'.@$select['label'].'</small>
             <div class="tom-select-custom">
-            <select
-            data-target-column-name="'.@$select['name'].'" class="js-datatable-filter form-select form-select-sm">
+            <select ' .$attrs. '>
                 <option value="">-ALL-</option>
                 '.$select['options'].'
             </select>';
@@ -438,7 +463,7 @@ function get_office_options($args = []){
     $return = "";
     $options = [];
 
-    $query = Office::query();
+    $query = Office::with('location');
 
     if($ddd_id != ""){
         $query = $query->where('ddd_id', $ddd_id);
@@ -446,7 +471,7 @@ function get_office_options($args = []){
 
     $sel = $query->orderBy('office_no')->get();
     foreach ($sel as $fet) {
-        $return .= '<option value='.@$fet->id.' '.(@$fet->id == $default ? "selected" : "").'>'.@$fet->office_no.'</option>';
+        $return .= '<option value='.@$fet->id.' '.(@$fet->id == $default ? "selected" : "").'>' .@$fet->office_no. ' - ' .@$fet->location->name. '</option>';
         $options[] = @$fet->id;
     }
     if($default == "validate"){

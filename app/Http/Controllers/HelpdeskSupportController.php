@@ -16,6 +16,13 @@ class HelpdeskSupportController extends Controller
 {
     public $label = 'Helpdesk Support';
 
+    protected function dataTable($data){
+        return DataTables::of($data)
+        ->addIndexColumn()
+        // ->with(['all_request' => $all_request])
+        ->make(true);
+    }
+
     public function index(Request $request){
         if($request->ajax()){
             $staff_condition = function ($query) {};
@@ -48,7 +55,8 @@ class HelpdeskSupportController extends Controller
                 'request.request_category.parent'
             ])
             ->whereHas('staff', $staff_condition)
-            ->whereHas('request.ddd', $ddd_condition);
+            ->whereHas('request.ddd', $ddd_condition)
+            ->select('helpdesk_supports.*');
 
             $request_id = request('request');
             if($request_id){
@@ -56,12 +64,12 @@ class HelpdeskSupportController extends Controller
                 ->where('helpdesk_request_id', $request_id);
             }
 
-            $data = $query
-            ->latest();
+            if($request->filled('status')){
+                $query = $query
+                ->where('helpdesk_supports.status', $request->status);
+            }
 
-            return DataTables::of($data)
-            ->addIndexColumn()
-            ->make(true);
+            return $this->dataTable($query);
         }
 
         return view('helpdesk-supports');

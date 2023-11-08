@@ -189,7 +189,8 @@ $(document).ready(function () {
         {title: 'Qty', data: 'quantity', name: 'quantity', className: 'dt-center text-nowrap'},
         {title: 'Status', data: 'status-view', searchable: false},
         {title: 'Date/Time', data: 'date-view', name: 'date-view'},
-        {title: 'Action', data: 'action', name: 'action', orderable: false, searchable: false},
+        {title: 'Action', data: 'action', name: 'action', orderable: false, searchable: false,
+            className: 'no-export'},
 
         {data: 'staff_no', name: 'staff_no', visible: false},
         {data: 'staff_name', name: 'staff_name', visible: false},

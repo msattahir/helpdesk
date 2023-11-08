@@ -13,7 +13,7 @@ class HelpdeskRequest extends Model
 
     protected static function booted(){
         static::addGlobalScope('valid', function ($query) {
-            $query->whereNull('valid_until');
+            $query->whereNull('helpdesk_requests.valid_until');
         });
     }
 
@@ -42,7 +42,9 @@ class HelpdeskRequest extends Model
     }
 
     public function first_support() {
-        return $this->hasOne(HelpdeskSupport::class, 'helpdesk_request_id')->oldestOfMany();
+        return $this
+        ->hasOne(HelpdeskSupport::class, 'helpdesk_request_id')
+        ->oldestOfMany();
     }
 
     public function last_support() {

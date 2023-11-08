@@ -259,7 +259,8 @@ $(document).ready(function () {
                     return replace_template_values($('#t-action').html(), row);
                 },
                 orderable: false,
-                searchable: false
+                searchable: false,
+                className: 'no-export'
             },
         ];
     }

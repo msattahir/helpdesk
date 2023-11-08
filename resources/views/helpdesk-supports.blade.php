@@ -29,7 +29,8 @@
                 [
                     'name' => 'status',
                     'label' => 'Status',
-                    'options' => get_request_status_options("Filter")
+                    'options' => get_request_status_options("Filter"),
+                    'custom-filter' => true
                 ]
             ]) !!}
             </x-filter>
@@ -217,7 +218,8 @@ $(document).ready(function () {
                 return replace_template_values($this.html(), row);
             },
             orderable: false,
-            searchable: false
+            searchable: false,
+            className: 'no-export'
         },
     ]);
 
@@ -297,6 +299,10 @@ $(document).ready(function () {
         }else{
             $('#escalate-to').html('');
         }
+    });
+
+    $(document).on('change', '.custom-filter', function(e){
+        datatable.ajax.reload();
     });
 });
 </script>

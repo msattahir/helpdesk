@@ -13,37 +13,41 @@ class ItemController extends Controller
 {
     public $label = 'Item';
 
+    private function dataTable($data){
+        return DataTables::of($data)
+        ->addIndexColumn()
+        ->addColumn('name-view', function($data){
+            return '<span class="d-block h5 text-inherit mb-0">'.@$data->name.'</span>';
+        })
+        ->addColumn('category-view', function($data){
+            return '<span class="d-block h5 text-inherit mb-0">'.@$data->category.'</span>';
+        })
+        ->addColumn('action', function($data){
+            $attrs = 'data-id="'.$data->id.'"'.
+                'data-name="'.$data->name.'"'.
+                'data-model="'.$data->model.'"'.
+                'data-category="'.$data->category.'"';
+            return '<div class="btn-group">
+                <button type="button" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#register-modal" name="edit" '.$attrs.'">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+                <div class="or or-xs"></div>
+                <button type="button" class="btn btn-danger btn-xs" name="delete" data-id="'.$data->id.'">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>';
+        })
+        ->with('no_records', $data->count())
+        ->rawColumns(['name-view', 'category-view', 'action'])
+        ->make(true);
+    }
+
     public function index(Request $request){
         if($request->ajax())
         {
-            $data = Item::latest();
+            $data = Item::query();
 
-            return DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn('name-view', function($data){
-                return '<span class="d-block h5 text-inherit mb-0">'.@$data->name.'</span>';
-            })
-            ->addColumn('category-view', function($data){
-                return '<span class="d-block h5 text-inherit mb-0">'.@$data->category.'</span>';
-            })
-            ->addColumn('action', function($data){
-                $attrs = 'data-id="'.$data->id.'"'.
-                    'data-name="'.$data->name.'"'.
-                    'data-model="'.$data->model.'"'.
-                    'data-category="'.$data->category.'"';
-                return '<div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#register-modal" name="edit" '.$attrs.'">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                    <div class="or or-xs"></div>
-                    <button type="button" class="btn btn-danger btn-xs" name="delete" data-id="'.$data->id.'">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div>';
-            })
-            ->with('no_records', $data->count())
-            ->rawColumns(['name-view', 'category-view', 'action'])
-            ->make(true);
+            return $this->dataTable($data);
         }
 
         return view('items');

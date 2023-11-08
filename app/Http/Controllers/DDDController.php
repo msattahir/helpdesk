@@ -16,11 +16,10 @@ class DDDController extends Controller
     public function index(Request $request){
         if($request->ajax())
         {
+            $data = Ddd::query();
             if(auth()->user()->role == "Floor Admin"){
                 $floor = auth()->user()->ddd->floor;
-                $data = Ddd::where('floor', $floor)->latest();
-            }else{
-                $data = Ddd::latest();
+                $data = $data->where('floor', $floor);
             }
 
             return DataTables::of($data)

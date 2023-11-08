@@ -17,21 +17,19 @@ class OfficeController extends Controller
         if($request->ajax())
         {
             $role = auth()->user()->role;
-            $query = Office::with('ddd', 'location');
+            $data = Office::with('ddd', 'location');
 
             if($role == "DDD Admin"){
                 $ddd_id = auth()->user()->ddd_id;
-                $query = $query
+                $data = $data
                 ->where('ddd_id', $ddd_id);
             }elseif($role == "Floor Admin"){
                 $floor = auth()->user()->ddd->floor;
-                $query = $query
+                $data = $data
                 ->whereHas('ddd', function ($query) use ($floor) {
                     $query->where('floor', $floor);
                 });
             }
-
-            $data = $query->latest();
 
             return DataTables::of($data)
             ->addIndexColumn()

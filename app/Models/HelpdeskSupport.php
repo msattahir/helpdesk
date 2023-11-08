@@ -13,7 +13,7 @@ class HelpdeskSupport extends Model
 
     protected static function booted(){
         static::addGlobalScope('valid', function ($query) {
-            $query->whereNull('valid_until');
+            $query->whereNull('helpdesk_supports.valid_until');
         });
     }
 

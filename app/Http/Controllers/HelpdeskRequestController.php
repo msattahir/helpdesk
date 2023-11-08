@@ -55,7 +55,7 @@ class HelpdeskRequestController extends Controller
             ])
             ->whereHas('staff', $staff_condition)
             ->whereHas('ddd', $ddd_condition)
-            ->latest();
+            ->select('helpdesk_requests.*');
 
             return DataTables::of($data)
             ->addIndexColumn()

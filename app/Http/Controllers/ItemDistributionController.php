@@ -19,9 +19,14 @@ class ItemDistributionController extends Controller
 {
     public $label = 'Item Distribution';
 
+    protected function dataTable($data){
+        return DataTables::of($data)
+        ->addIndexColumn()
+        ->toJson();
+    }
+
     public function index(Request $request){
         if($request->ajax()){
-
             $staff_condition = function ($query) {};
             $ddd_condition = function ($query) {};
 
@@ -48,18 +53,66 @@ class ItemDistributionController extends Controller
                 };
             }
 
-            $data = ItemDistribution::with([
-                'distributionable.ddd',
-                'distributionable.location',
-                'distribution_item.item'
-            ])
+            // $data = ItemDistribution::with([
+            //     'distributionable.ddd',
+            //     'distributionable.location',
+            //     'distribution_item.item'
+            // ])
             // ->where($staff_condition)
             // ->whereHas('ddd', $ddd_condition)
-            ->latest();
+            ;
 
-            return DataTables::of($data)
-            ->addIndexColumn()
-            ->make(true);
+            $data = ItemDistribution::leftJoin('staff', function ($join) {
+                $join->on('item_distributions.distributionable_id', '=', 'staff.id')
+                    ->where('item_distributions.distributionable_type', '=', 'App\Models\Staff');
+            })
+            ->leftJoin('offices', function ($join) {
+                $join->on('item_distributions.distributionable_id', '=', 'offices.id')
+                    ->where('item_distributions.distributionable_type', '=', 'App\Models\Office');
+            })
+            ->leftJoin('ddds', function ($join) {
+                $join->on('staff.ddd_id', '=', 'ddds.id')
+                    ->orOn('offices.ddd_id', '=', 'ddds.id');
+            })
+            ->leftJoin('locations', function ($join) {
+                $join->on('staff.location_id', '=', 'locations.id')
+                    ->orOn('offices.location_id', '=', 'locations.id');
+            })
+            ->leftJoin('distribution_items', 'item_distributions.distribution_item_id', '=', 'distribution_items.id')
+            ->leftJoin('items', 'distribution_items.item_id', '=', 'items.id')
+            ->select(
+                'item_distributions.*',
+
+                'staff.id AS staff_id',
+                'offices.id AS office_id',
+                DB::raw("IF(staff.id IS NOT NULL, 'Staff', 'Office') AS category,
+                IF(staff.id IS NOT NULL, staff.staff_no, offices.office_no) AS receiver_no,
+                IF(staff.id IS NOT NULL, staff.name, 'Office No') AS receiver_name"),
+
+                'ddds.id AS ddd_id',
+                'ddds.short AS ddd_name',
+                'ddds.floor AS ddd_floor',
+                DB::raw("IF(locations.id = 1, ddds.floor, locations.name) AS ddd_location"),
+
+                'items.id AS item_id',
+                'items.name AS item_name',
+                'items.model AS item_model',
+                'distribution_items.reference_no AS item_reference_no',
+            );
+
+            $data = DB::table($data)
+            ->select('*');
+
+            if($request->filled('date_from')){
+                $data = $data
+                ->where('time', '>=', $request->date_from);
+            }
+            if($request->filled('date_to')){
+                $data = $data
+                ->where('time', '<=', $request->date_to);
+            }
+
+            return $this->dataTable($data);
         }
 
         return view('item-distributions');

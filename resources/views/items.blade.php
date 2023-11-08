@@ -91,13 +91,10 @@
 $(document).ready(function () {
     initialize_datatable('#records-table', columns = [
         {title: '#', data: 'DT_RowIndex', width: '1px', orderable: false, searchable: false},
-        {title: 'Name', data: 'name-view', searchable: false},
+        {title: 'Name', name: 'name', data: 'name-view'},
         {title: 'Model', data: 'model', name: 'model'},
-        {title: 'Category', data: 'category-view', searchable: false},
-        {title: 'Action', data: 'action', name: 'action', width: '1px', orderable: false, searchable: false},
-
-        {data: 'name', name: 'name', visible: false},
-        {data: 'category', name: 'category', visible: false}
+        {title: 'Category', name: 'category', data: 'category-view'},
+        {title: 'Action', data: 'action', name: 'action', width: '1px', orderable: false, searchable: false, className: 'no-export'},
     ]);
 
     manage_records({url : '/items'});
