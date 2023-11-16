@@ -742,23 +742,25 @@ function get_authorized_routes($user){
         ];
     }elseif(in_array($role, ["Helpdesk Admin", "Adhoc Staff"])){
         $specific_routes = [
-            'helpdesk-requests.update', 'helpdesk-requests.delete',
+            'helpdesk-requests.index', 'helpdesk-requests.store', 'helpdesk-requests.show', 'helpdesk-requests.update', 'helpdesk-requests.delete',
 
-            'helpdesk-supports.index', 'helpdesk-supports.show',
-            'helpdesk-supports.update', 'helpdesk-supports.delete'
+            'helpdesk-supports.index', 'helpdesk-supports.store', 'helpdesk-supports.show', 'helpdesk-supports.update', 'helpdesk-supports.delete'
         ];
     }elseif($role == 'Inventory Admin'){
         $specific_routes = [
-            'items.index', 'items.update', 'items.delete',
-            'helpdesk-requests.update', 'helpdesk-requests.delete',
-            'helpdesk-supports.index', 'helpdesk-supports.show',
-            'helpdesk-supports.update', 'helpdesk-supports.delete',
-            'inventory.index', 'inventory.show', 'inventory.update', 'inventory.delete',
-            'item-distributions.index', 'item-distributions.show', 'item-distributions.update', 'item-distributions.delete'
+            'items.index', 'items.store', 'items.update', 'items.delete',
+
+            'helpdesk-requests.update', 'helpdesk-requests.store', 'helpdesk-requests.delete',
+
+            'helpdesk-supports.index', 'helpdesk-supports.store', 'helpdesk-supports.show', 'helpdesk-supports.update', 'helpdesk-supports.delete',
+
+            'inventory.index', 'inventory.store', 'inventory.show', 'inventory.update', 'inventory.delete',
+
+            'item-distributions.index', 'item-distributions.store', 'item-distributions.show', 'item-distributions.update', 'item-distributions.delete'
         ];
     }elseif($role == 'Helpdesk Staff'){
         $specific_routes = [
-            'helpdesk-supports.index', 'helpdesk-supports.show', 'helpdesk-supports.update'
+            'helpdesk-supports.index', 'helpdesk-supports.store', 'helpdesk-supports.show', 'helpdesk-supports.update'
         ];
     }
 
