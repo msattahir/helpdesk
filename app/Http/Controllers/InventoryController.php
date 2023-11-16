@@ -28,9 +28,12 @@ class InventoryController extends Controller
             ->orderBy('name')
             ->orderBy('model');
 
-            $data = DB::table($sub_query)
+            $query = DB::table($sub_query)
             ->select('*')
             ->selectRaw('inventory_total - distribution_total AS inventory_balance');
+
+            $data = DB::table($query)
+            ->select('*');
 
             return DataTables::of($data)
             ->addIndexColumn()

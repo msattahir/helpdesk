@@ -6,7 +6,7 @@
     class="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white print-hide">
     <div class="navbar-nav-wrap">
 
-        <x-navbar-brand />
+        <x-navbar-brand/>
 
         <div class="navbar-nav-wrap-content-start">
             <button type="button" class="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
