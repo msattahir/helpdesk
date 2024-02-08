@@ -267,6 +267,21 @@ function get_distribution_condition_options($default = ""){
 }
 }
 
+if (!function_exists('get_allocation_period_options')) {
+    function get_allocation_period_options($default = ""){
+        $return = "";
+        $options = ["Recent"];
+
+        if($default == "validate"){
+            return $options;
+        }
+        foreach ($options as $value) {
+            $return .= "<option ".($default == $value ? "selected":"").">$value</option>";
+        }
+        return $return;
+    }
+}
+
 if (!function_exists('get_ordinal')) {
 function get_ordinal($number) {
     $ends = array('th','st','nd','rd','th','th','th','th','th','th');

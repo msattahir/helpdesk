@@ -70,6 +70,7 @@
     var filter;
     var date_from;
     var date_to;
+    var allocation_period;
 
     function initialize_datatable(
         table_id = '#records-table',
@@ -151,6 +152,7 @@
                     });
                     d.date_from = date_from;
                     d.date_to = date_to;
+                    d.allocation_period = allocation_period;
                 }
             },
             columns: columns
@@ -197,6 +199,7 @@
             setTimeout(function() {
                 date_from = '';
                 date_to = '';
+                allocation_period = '';
                 datatable.columns().search( '' ).draw();
 
                 $('#filter-counter').html("");

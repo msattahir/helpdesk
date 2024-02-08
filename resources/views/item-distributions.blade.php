@@ -57,11 +57,16 @@
                     'name' => 'date_to',
                     'type' => 'date',
                     'label' => 'Date To'
+                ],
+                [
+                    'name' => 'allocation_period',
+                    'label' => 'Allocation Period',
+                    'options' => get_allocation_period_options(),
+                    'custom-filter' => true,
                 ]
             ]) !!}
             </x-filter>
         </x-table-header>
-
         <div id="response" class="m-2"></div>
         <x-table/>
 
@@ -487,6 +492,7 @@ $(document).ready(function () {
             $('#filter-form [name="date_to"]').attr('min', $(this).val());
         }
         datatable.ajax.reload();
+        update_filter_count();
     });
 
     $(document).on('change', '#filter-form [name="date_to"]', function(e){
@@ -499,6 +505,18 @@ $(document).ready(function () {
             $('#filter-form [name="date_from"]').attr('max', $(this).val());
         }
         datatable.ajax.reload();
+        update_filter_count();
+    });
+
+    $(document).on('change', '#filter-form [name="allocation_period"]', function(e){
+        if($(this).val() == ""){
+            allocation_period = "";
+        }else{
+            allocation_period = $(this).val();
+        }
+
+        datatable.ajax.reload();
+        update_filter_count();
     });
 });
 </script>
