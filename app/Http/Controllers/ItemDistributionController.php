@@ -62,17 +62,6 @@ class ItemDistributionController extends Controller
             // ->whereHas('ddd', $ddd_condition)
             // ;
 
-
-
-            if($request->filled('allocation_period')){
-                $recent_subquery = DB::table('item_distributions as s')
-                ->select('id')
-                ->whereNull('s.valid_until')
-                ->whereRaw('s.distributionable_id = item_distributions.distributionable_id')
-                ->whereRaw('s.distributionable_type = item_distributions.distributionable_type')
-                ->whereRaw('s.time > item_distributions.time');
-            }
-
             $data = ItemDistribution::leftJoin('staff', function ($join) {
                 $join->on('item_distributions.distributionable_id', '=', 'staff.id')
                     ->where('item_distributions.distributionable_type', '=', 'App\Models\Staff');
@@ -114,6 +103,13 @@ class ItemDistributionController extends Controller
 
 
             if($request->filled('allocation_period')){
+                $recent_subquery = DB::table('item_distributions as s')
+                ->select('id')
+                ->whereNull('s.valid_until')
+                ->whereRaw('s.distributionable_id = item_distributions.distributionable_id')
+                ->whereRaw('s.distributionable_type = item_distributions.distributionable_type')
+                ->whereRaw('s.time > item_distributions.time');
+
                 $data = $data
                 ->whereNotExists($recent_subquery);
             }
