@@ -101,7 +101,7 @@ class HelpdeskRequestController extends Controller
             'time' => $timestamp
         ]);
 
-        HelpdeskRequestSubmitted::dispatch($helpdesk_request, $first_support);
+        // HelpdeskRequestSubmitted::dispatch($helpdesk_request, $first_support);
 
         return response()->json([
             'status' => 'success',

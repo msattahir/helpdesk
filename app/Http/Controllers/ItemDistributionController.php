@@ -79,7 +79,11 @@ class ItemDistributionController extends Controller
                     ->orOn('offices.location_id', '=', 'locations.id');
             })
             ->leftJoin('distribution_items', 'item_distributions.distribution_item_id', '=', 'distribution_items.id')
-            ->leftJoin('items', 'distribution_items.item_id', '=', 'items.id')
+            // ->leftJoin('items', 'distribution_items.item_id', '=', 'items.id')
+            ->join('items', function ($join) {
+                $join->on('distribution_items.item_id', '=', 'items.id')
+                    ->where('items.name', '=', 'LAPTOP');
+            })
             ->select(
                 'item_distributions.*',
 
@@ -104,8 +108,16 @@ class ItemDistributionController extends Controller
 
             if($request->filled('allocation_period')){
                 $recent_subquery = DB::table('item_distributions as s')
-                ->select('id')
+
+                ->join('distribution_items AS d', 's.distribution_item_id', '=', 'd.id')
+                ->join('items AS i', 'd.item_id', '=', 'i.id')
+
+                ->select('s.id')
                 ->whereNull('s.valid_until')
+
+                ->where('i.name', '=', 'LAPTOP')
+                ->where('s.status', '=', 'Distributed')
+
                 ->whereRaw('s.distributionable_id = item_distributions.distributionable_id')
                 ->whereRaw('s.distributionable_type = item_distributions.distributionable_type')
                 ->whereRaw('s.time > item_distributions.time');

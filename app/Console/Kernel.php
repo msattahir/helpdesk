@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('backup:run', ['--only-db'])->weekdays()->at('23:00');
+        $schedule->command('backup:run', ['--only-db'])->weekdays()->at('16:42');
     }
 
     /**

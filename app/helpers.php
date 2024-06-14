@@ -759,7 +759,9 @@ function get_authorized_routes($user){
         $specific_routes = [
             'helpdesk-requests.index', 'helpdesk-requests.store', 'helpdesk-requests.show', 'helpdesk-requests.update', 'helpdesk-requests.delete',
 
-            'helpdesk-supports.index', 'helpdesk-supports.store', 'helpdesk-supports.show', 'helpdesk-supports.update', 'helpdesk-supports.delete'
+            'helpdesk-supports.index', 'helpdesk-supports.store', 'helpdesk-supports.show', 'helpdesk-supports.update', 'helpdesk-supports.delete',
+
+            'item-distributions.index', 'item-distributions.store', 'item-distributions.show', 'item-distributions.update', 'item-distributions.delete',
         ];
     }elseif($role == 'Inventory Admin'){
         $specific_routes = [
